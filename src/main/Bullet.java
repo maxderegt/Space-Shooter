@@ -1,0 +1,112 @@
+package main;
+
+/**
+ * Created by maxde on 1-4-2016.
+ */
+public class Bullet {
+    private double x;
+    private double y;
+    private double speed = 6;
+    private double xspeed;
+    private double yspeed;
+    private int eindx;
+    private int eindy;
+    private int damage = 34;
+
+    public Bullet(int x, int y, int eindx, int eindy){
+        this.x = x;
+        this.y = y;
+        this.eindx = eindx;
+        this.eindy = eindy;
+        boolean xpositief;
+        boolean ypositief;
+        int totaal;
+        int xafstand;
+        int yafstand;
+        if(x<eindx){
+            xafstand = x-eindx;
+            xpositief = true;
+        }
+        else {
+            xafstand = eindx-x;
+            xpositief = false;
+        }
+        if(y<eindy){
+            yafstand = y-eindy;
+            ypositief = true;
+        }
+        else {
+            yafstand = eindy-y;
+            ypositief = false;
+        }
+        totaal = xafstand + yafstand;
+        xspeed = ((double)xafstand / (double)totaal)*speed;
+        yspeed = ((double)yafstand / (double)totaal)*speed;
+        if(!xpositief)xspeed = xspeed*-1;
+        if(!ypositief)yspeed = yspeed*-1;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public void setDamage(int damage) {
+        this.damage = damage;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    public double getXspeed() {
+        return xspeed;
+    }
+
+    public void setXspeed(double xspeed) {
+        this.xspeed = xspeed;
+    }
+
+    public double getYspeed() {
+        return yspeed;
+    }
+
+    public void setYspeed(double yspeed) {
+        this.yspeed = yspeed;
+    }
+
+    public int getEindx() {
+        return eindx;
+    }
+
+    public void setEindx(int eindx) {
+        this.eindx = eindx;
+    }
+
+    public int getEindy() {
+        return eindy;
+    }
+
+    public void setEindy(int eindy) {
+        this.eindy = eindy;
+    }
+}
