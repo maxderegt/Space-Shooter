@@ -10,7 +10,6 @@ import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.*;
 
 /**
@@ -24,9 +23,11 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
     private ArrayList<Enemy> enemies = new ArrayList<>();
     private ArrayList<Shape> buttons = new ArrayList<>();
     private ArrayList<Explosion> explosions = new ArrayList<>();
+    private BufferedImage expl;
     private BufferedImage background;
     private BufferedImage bloodback;
     private BufferedImage shopi;
+    private ArrayList<Image> images = new ArrayList<>();
     private Graphics2D back;
     private Timer bullet;
     private Timer step;
@@ -44,6 +45,7 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
         addMouseListener(this);
         addKeyListener(this);
         addMouseMotionListener(this);
+        loadResources();
         step = new Timer(1000/60, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -62,32 +64,9 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
                 bullets.add(new Bullet((int)player.getX()+player.getSize()/2,(int)player.getY()+player.getSize()/2,x,y));
             }
         });
-        try{
-        background = ImageIO.read(new File("src/background.jpg"));
-        } catch (IOException e) {
-            }
-
-
-        //Sounds
-        Mixer.Info[] mixinfo = AudioSystem.getMixerInfo();
-        mixer = AudioSystem.getMixer(mixinfo[0]);
-        DataLine.Info datainfo = new DataLine.Info(Clip.class, null);
-        try{
-            clip = (Clip)(mixer.getLine(datainfo));
-        }
-        catch (LineUnavailableException lue){lue.printStackTrace();}
-
-        try{
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(Explosion.class.getResource("/main/starlight.wav"));
-            clip.open(audioInputStream);
-            clip.loop(Clip.LOOP_CONTINUOUSLY);
-        }
-        catch (LineUnavailableException lue){lue.printStackTrace();}
-        catch (UnsupportedAudioFileException uafe){uafe.printStackTrace();}
-        catch (IOException io){io.printStackTrace();}
-        FloatControl gainControl =
-                (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-        gainControl.setValue(-10.0f);
+//      FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+//      gainControl.setValue(-10.0f);
+        clip.loop(Clip.LOOP_CONTINUOUSLY);
         clip.start();
 
 
@@ -98,6 +77,30 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
         step.start();
         spawn = true;
         shopb = true;
+    }
+
+    public void loadResources(){
+
+        //Sound device selecting
+        Mixer.Info[] mixinfo = AudioSystem.getMixerInfo();
+        mixer = AudioSystem.getMixer(mixinfo[0]);
+        DataLine.Info datainfo = new DataLine.Info(Clip.class, null);
+
+        try{
+            background = ImageIO.read(Game.class.getResourceAsStream("/resources/background.jpg"));
+            Image big1 = ImageIO.read(Game.class.getResourceAsStream("/resources/Bigenemy2.png"));
+            Image small1 = ImageIO.read(Game.class.getResourceAsStream("/resources/Smallenemy1.png"));
+            Image big2 = ImageIO.read(Game.class.getResourceAsStream("/resources/Bigenemy1.png"));
+            Image small2 = ImageIO.read(Game.class.getResourceAsStream("/resources/Smallenemy2.png"));
+            expl = ImageIO.read(Game.class.getResourceAsStream("/resources/explode_1.png"));
+            images.add(big1);images.add(small1);images.add(big2);images.add(small2);
+            clip = (Clip)(mixer.getLine(datainfo));
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(Explosion.class.getResource("/resources/starlight.wav"));
+            clip.open(audioInputStream);
+        }
+        catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {e.printStackTrace();}
+
+
     }
 
     public void addNotify() {
@@ -237,19 +240,19 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
                         int richting = (int) (Math.round(Math.random() * 4));
                         switch (richting) {
                             case 1:
-                                enemies.add(new Enemy((int) (Math.random() * getWidth()), -1 * (int) (Math.random() * 500),player.getLevel()));
+                                enemies.add(new Enemy((int) (Math.random() * getWidth()), -1 * (int) (Math.random() * 500),player.getLevel(),images));
                                 break;
 
                             case 2:
-                                enemies.add(new Enemy(getWidth() + (int) (Math.random() * 500), (int) (Math.random() * getHeight()),player.getLevel()));
+                                enemies.add(new Enemy(getWidth() + (int) (Math.random() * 500), (int) (Math.random() * getHeight()),player.getLevel(),images));
                                 break;
 
                             case 3:
-                                enemies.add(new Enemy((int) (Math.random() * getWidth()), getHeight() + (int) (Math.random() * 500),player.getLevel()));
+                                enemies.add(new Enemy((int) (Math.random() * getWidth()), getHeight() + (int) (Math.random() * 500),player.getLevel(),images));
                                 break;
 
                             case 4:
-                                enemies.add(new Enemy(-1 * (int) (Math.random() * 500), (int) (Math.random() * getHeight()),player.getLevel()));
+                                enemies.add(new Enemy(-1 * (int) (Math.random() * 500), (int) (Math.random() * getHeight()),player.getLevel(),images));
                                 break;
                         }
                         i++;
@@ -279,7 +282,7 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
                             if (enemy.getHealth() < 0) enemy.setHealth(0);
                             if (enemy.getHealth() == 0) {
                                 if (!removed) {
-                                    explosions.add(new Explosion((int)enemy.getRect2().getBounds().getX(),(int)enemy.getRect2().getBounds().getY()));
+                                    explosions.add(new Explosion((int)enemy.getRect2().getBounds().getX(),(int)enemy.getRect2().getBounds().getY(),expl));
                                     iterator2.remove();
                                     player.setScore(player.getScore() + 1);
                                     removed = true;

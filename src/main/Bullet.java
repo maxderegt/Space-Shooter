@@ -1,5 +1,8 @@
 package main;
 
+import javax.sound.sampled.*;
+import java.io.IOException;
+
 /**
  * Created by maxde on 1-4-2016.
  */
@@ -12,6 +15,8 @@ public class Bullet {
     private int eindx;
     private int eindy;
     private int damage = 34;
+    private Mixer mixer;
+    private Clip clip;
 
     public Bullet(int x, int y, int eindx, int eindy){
         this.x = x;
@@ -44,6 +49,24 @@ public class Bullet {
         yspeed = ((double)yafstand / (double)totaal)*speed;
         if(!xpositief)xspeed = xspeed*-1;
         if(!ypositief)yspeed = yspeed*-1;
+
+        Mixer.Info[] mixinfo = AudioSystem.getMixerInfo();
+        mixer = AudioSystem.getMixer(mixinfo[0]);
+        DataLine.Info datainfo = new DataLine.Info(Clip.class, null);
+        try{
+            clip = (Clip)(mixer.getLine(datainfo));
+        }
+        catch (LineUnavailableException lue){lue.printStackTrace();}
+
+        try{
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(Explosion.class.getResource("/resources/laser.wav"));
+            clip.open(audioInputStream);
+        }
+        catch (LineUnavailableException | UnsupportedAudioFileException | IOException lue){lue.printStackTrace();}
+        clip.loop(0);
+        clip.start();
+
+
     }
 
     public int getDamage() {

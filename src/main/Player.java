@@ -35,7 +35,8 @@ public class Player {
     public Player(int x, int y){
         this.x = x;
         this.y = y;
-        rect = new Ellipse2D.Double(x+6,y,size,size);
+        rect = new Ellipse2D.Double(x,y,size,size);
+
         rect2 = new Area(rect);
         richting = Math.random() * Math.PI*2;
         transform = new AffineTransform();

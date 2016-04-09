@@ -1,5 +1,6 @@
 package main;
 
+import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by maxde on 2-4-2016.
@@ -19,7 +21,7 @@ public class Enemy {
     private double x;
     private double y;
     private int size = 30;
-    private int speed = 2;
+    private double speed = 2;
     private double xspeed;
     private double yspeed;
     private double richting;
@@ -32,40 +34,36 @@ public class Enemy {
     private AffineTransform transform;
 
 
-    public Enemy(int x, int y, int level){
+    public Enemy(int x, int y, int level, ArrayList<Image> images){
         health = health + (health/10 * level);
         int enemy = (int)(Math.round(Math.random()*3));
         if(enemy==0){
-            sprite = new ImageIcon("src/Bigenemy2.png").getImage();
+            sprite = images.get(0);
             health = health + health/2;
             damage = damage - damage/4;
-            speed = speed - speed/2;
+            speed = speed - speed/4;
             turn = 0.05;
-            System.out.println("Enemey: " + enemy + " health : " + health + " damage: " + damage);
         }
         else if (enemy ==1){
-            sprite = new ImageIcon("src/Smallenemy1.png").getImage();
+            sprite = images.get(1);
             health = health + health/4;
             damage = damage - damage/2;
             speed = speed - speed/4;
             turn = 0.05;
-            System.out.println("Enemey: " + enemy + " health : " + health + " damage: " + damage);
         }
         else if (enemy == 2){
-            sprite = new ImageIcon("src/Bigenemy1.png").getImage();
+            sprite = images.get(2);
             health = health - health/4;
             damage = damage + damage/2;
-            speed = speed + speed/4;
-            turn = 0.02;
-            System.out.println("Enemey: " + enemy + " health : " + health + " damage: " + damage);
+            speed = speed + speed/2;
+            turn = 0.015;
         }
         else if(enemy == 3){
-            sprite = new ImageIcon("src/Smallenemy2.png").getImage();
+            sprite = images.get(3);
             health = health - health/2;
             damage = damage + damage/4;
             speed = speed + speed/2;
             turn = 0.02;
-            System.out.println("Enemey: " + enemy + " health : " + health + " damage: " + damage);
         }
         rect = new Rectangle2D.Double(0,0,sprite.getWidth(null),sprite.getHeight(null));
         rect2 = rect;
@@ -173,11 +171,11 @@ public class Enemy {
         this.size = size;
     }
 
-    public int getSpeed() {
+    public double getSpeed() {
         return speed;
     }
 
-    public void setSpeed(int speed) {
+    public void setSpeed(double speed) {
         this.speed = speed;
     }
 

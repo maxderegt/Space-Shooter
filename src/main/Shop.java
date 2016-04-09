@@ -4,19 +4,19 @@ package main;
  * Created by maxde on 5-4-2016.
  */
 public class Shop {
-    private int hpcost = 100;
+    private int hpcost = 30;
     private double hpincrement = 1.1;
     private double hpcostincrement = 1.2;
-    private int spcost = 100;
+    private int spcost = 30;
     private double spincrement = 1.1;
     private double spcostincrement = 1.2;
-    private int shcost = 100;
+    private int shcost = 30;
     private double shincrement = 1.1;
     private double shcostincrement = 1;
-    private int frcost = 100;
+    private int frcost = 30;
     private double frincrement = 1.1;
     private double frcostincrement = 1.2;
-    private int dmcost = 100;
+    private int dmcost = 30;
     private double dmincrement = 1.1;
     private double dmcostincrement = 1.2;
 

@@ -27,7 +27,7 @@ public class Explosion {
     private Mixer mixer;
     private Clip clip;
 
-    public Explosion(int x2, int y2){
+    public Explosion(int x2, int y2, BufferedImage bigimg2){
         int rows = 3;
         int cols = 3;
         int width = 64;
@@ -37,12 +37,7 @@ public class Explosion {
         img = new BufferedImage(64,64,BufferedImage.TYPE_4BYTE_ABGR);
         g2 = img.createGraphics();
         BufferedImage bigImg = null;
-        try {
-            bigImg = ImageIO.read(new File("src/main/explode_1.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        bigImg = bigimg2;
         for (int i = 0; i < rows; i++)
         {
             for (int j = 0; j < cols; j++)
@@ -64,15 +59,13 @@ public class Explosion {
         catch (LineUnavailableException lue){lue.printStackTrace();}
 
         try{
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(Explosion.class.getResource("/main/explosion.wav"));
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(Explosion.class.getResource("/resources/explosion.wav"));
             clip.open(audioInputStream);
         }
-        catch (LineUnavailableException lue){lue.printStackTrace();}
-        catch (UnsupportedAudioFileException uafe){uafe.printStackTrace();}
-        catch (IOException io){io.printStackTrace();}
-        FloatControl gainControl =
-                (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-        gainControl.setValue(-10.0f);
+        catch (LineUnavailableException | UnsupportedAudioFileException | IOException lue){lue.printStackTrace();}
+        //volume setter
+        //FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+        //gainControl.setValue(-10.0f);
         boom = new Timer(100, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
