@@ -27,6 +27,7 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
     private BufferedImage background;
     private BufferedImage bloodback;
     private BufferedImage shopi;
+    private Image playerimg;
     private ArrayList<Image> images = new ArrayList<>();
     private Graphics2D back;
     private Timer bullet;
@@ -71,7 +72,7 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
 
 
 
-        player = new Player(1000000,1000000);
+        player = new Player(1000000, 1000000,playerimg);
         shop = new Shop();
         refresh.start();
         step.start();
@@ -93,6 +94,7 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
             Image big2 = ImageIO.read(Game.class.getResourceAsStream("/resources/Bigenemy1.png"));
             Image small2 = ImageIO.read(Game.class.getResourceAsStream("/resources/Smallenemy2.png"));
             expl = ImageIO.read(Game.class.getResourceAsStream("/resources/explode_1.png"));
+            playerimg = ImageIO.read(Game.class.getResourceAsStream("/resources/player.png"));
             images.add(big1);images.add(small1);images.add(big2);images.add(small2);
             clip = (Clip)(mixer.getLine(datainfo));
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(Explosion.class.getResource("/resources/starlight.wav"));
@@ -123,7 +125,7 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
         }
         Graphics2D G2 = img.createGraphics();
         G2.setColor(new Color(1,0, 255));
-        G2.fill(player.getRect());
+        G2.drawImage(player.getSprite(),player.getTransform(),null);
         for(Bullet bullet : bullets){
             G2.setColor(new Color(255, 105,0));
             G2.fillOval((int)(bullet.getX()-2),(int)(bullet.getY()-2),4,4);
@@ -160,45 +162,45 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
                         if (pressed.contains('w') || pressed.contains('s')) {
                             if (key == 'a') {
                                 player.setX(player.getX() - player.getSpeed() * 0.7);
-                                player.setRect(new Ellipse2D.Double(player.getX(), player.getY(), player.getSize(), player.getSize()));
+                                player.setRect(new Rectangle2D.Double(player.getX(), player.getY(), player.getSize(), player.getSize()));
                             }
                         } else {
                             if (key == 'a') {
                                 player.setX(player.getX() - player.getSpeed());
-                                player.setRect(new Ellipse2D.Double(player.getX(), player.getY(), player.getSize(), player.getSize()));
+                                player.setRect(new Rectangle2D.Double(player.getX(), player.getY(), player.getSize(), player.getSize()));
                             }
                         }
                         if (pressed.contains('w') || pressed.contains('s')) {
                             if (key == 'd') {
                                 player.setX(player.getX() + player.getSpeed() * 0.7);
-                                player.setRect(new Ellipse2D.Double(player.getX(), player.getY(), player.getSize(), player.getSize()));
+                                player.setRect(new Rectangle2D.Double(player.getX(), player.getY(), player.getSize(), player.getSize()));
                             }
                         } else {
                             if (key == 'd') {
                                 player.setX(player.getX() + player.getSpeed());
-                                player.setRect(new Ellipse2D.Double(player.getX(), player.getY(), player.getSize(), player.getSize()));
+                                player.setRect(new Rectangle2D.Double(player.getX(), player.getY(), player.getSize(), player.getSize()));
                             }
                         }
                         if (pressed.contains('a') || pressed.contains('d')) {
                             if (key == 's') {
                                 player.setY(player.getY() + player.getSpeed() * 0.7);
-                                player.setRect(new Ellipse2D.Double(player.getX(), player.getY(), player.getSize(), player.getSize()));
+                                player.setRect(new Rectangle2D.Double(player.getX(), player.getY(), player.getSize(), player.getSize()));
                             }
                         } else {
                             if (key == 's') {
                                 player.setY(player.getY() + player.getSpeed());
-                                player.setRect(new Ellipse2D.Double(player.getX(), player.getY(), player.getSize(), player.getSize()));
+                                player.setRect(new Rectangle2D.Double(player.getX(), player.getY(), player.getSize(), player.getSize()));
                             }
                         }
                         if (pressed.contains('a') || pressed.contains('d')) {
                             if (key == 'w') {
                                 player.setY(player.getY() - player.getSpeed() * 0.7);
-                                player.setRect(new Ellipse2D.Double(player.getX(), player.getY(), player.getSize(), player.getSize()));
+                                player.setRect(new Rectangle2D.Double(player.getX(), player.getY(), player.getSize(), player.getSize()));
                             }
                         } else {
                             if (key == 'w') {
                                 player.setY(player.getY() - player.getSpeed());
-                                player.setRect(new Ellipse2D.Double(player.getX(), player.getY(), player.getSize(), player.getSize()));
+                                player.setRect(new Rectangle2D.Double(player.getX(), player.getY(), player.getSize(), player.getSize()));
                             }
                         }
                         if (player.getX() <= 5) {
@@ -215,12 +217,7 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
                         }
                     }
                 }
-                for(Iterator<Explosion> iterator = explosions.iterator(); iterator.hasNext();){
-                    Explosion explosion = iterator.next();
-                    if(explosion.getSpritenum()==explosion.getSprites().size()){
-                        iterator.remove();
-                    }
-                }
+
                 if (bullets.size() > 0) {
                     for (Iterator<Bullet> iterator = bullets.iterator(); iterator.hasNext(); ) {
                         Bullet bullet = iterator.next();
@@ -232,6 +229,17 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
                     }
 
                 }
+
+                double dx = x - player.getX();
+                double dy = y - player.getY();
+                double newRichting = Math.atan2(dy, dx);
+                player.setRichting(newRichting);
+                player.setTransform(new AffineTransform());
+                player.getTransform().translate(player.getX() - player.getSprite().getWidth(null) / 2,player.getY() - player.getSprite().getHeight(null) / 2);
+                player.getTransform().rotate(player.getRichting(), player.getSprite().getWidth(null) / 2, player.getSprite().getHeight(null) / 2);
+
+                player.setRect2(player.getTransform().createTransformedShape(player.getRect()));
+
                 if (spawn) {
                     player.setLevel(player.getLevel() + 1);
                     int level = player.getLevel();
@@ -258,6 +266,12 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
                         i++;
                     }
                     spawn = false;
+                }
+            }
+            for(Iterator<Explosion> iterator = explosions.iterator(); iterator.hasNext();){
+                Explosion explosion = iterator.next();
+                if(explosion.getSpritenum()==explosion.getSprites().size()){
+                    iterator.remove();
                 }
             }
             if(enemies.size()==0){
@@ -290,8 +304,7 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
                             }
                         }
                     }
-
-                    if (enemy.getRect2().contains(player.getX(),player.getY()) && !shopb) {
+                    if (enemy.getRect2().intersects(player.getRect().getBounds()) && !shopb) {
                         if (!player.isHit()) {
                             player.setHit(true);
                             player.getHit2().start();
@@ -392,7 +405,9 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
     public void mousePressed(MouseEvent e) {
         if(player.getHealth()>0 && enemies.size()!=0) {
             bullet.start();
-            bullets.add(new Bullet((int) player.getX() + player.getSize() / 2, (int) player.getY() + player.getSize() / 2, x, y));
+
+            bullets.add(new Bullet((int)player.getX(), (int)player.getY(), x, y));
+
         }
         if(player.getHealth()<=0){
             if(buttons.size()!=0){
@@ -447,7 +462,7 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
                     player.setHealth(player.getMaxhealth());
                     player.setX(getWidth()/2);
                     player.setY(getHeight()/2);
-                    player.setRect(new Ellipse2D.Double(player.getX(),player.getY(),player.getSize(),player.getSize()));
+                    player.setRect(new Rectangle2D.Double(player.getX(),player.getY(),player.getSize(),player.getSize()));
                     player.setLevel(0);
                     bloodcreated = false;
                     game = true;
@@ -497,6 +512,7 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
     public void mouseDragged(MouseEvent e) {
         x = e.getX();
         y = e.getY();
+
     }
 
     @Override

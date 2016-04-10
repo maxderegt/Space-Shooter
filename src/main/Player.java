@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 
 /**
  * Created by maxde on 1-4-2016.
@@ -26,24 +27,20 @@ public class Player {
     private int level = 0;
     private boolean hit = false;
     private Timer hit2;
-    private Ellipse2D.Double rect;
+    private Rectangle2D.Double rect;
     private Shape rect2;
     private Image sprite;
     private AffineTransform transform;
 
 
-    public Player(int x, int y){
+    public Player(int x, int y, Image image){
         this.x = x;
         this.y = y;
-        rect = new Ellipse2D.Double(x,y,size,size);
-
+        rect = new Rectangle2D.Double(x,y,size,size);
+        sprite = image;
         rect2 = new Area(rect);
         richting = Math.random() * Math.PI*2;
         transform = new AffineTransform();
-//        transform.translate(
-//                x - sprite.getWidth(null)/2,
-//                y - sprite.getHeight(null)/2);
-//        transform.rotate(richting, sprite.getWidth(null)/2, sprite.getHeight(null)/2);
         hit2 = new Timer(500, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e2) {
@@ -165,11 +162,11 @@ public class Player {
         this.hit2 = hit2;
     }
 
-    public Ellipse2D.Double getRect() {
+    public Rectangle2D.Double getRect() {
         return rect;
     }
 
-    public void setRect(Ellipse2D.Double rect) {
+    public void setRect(Rectangle2D.Double rect) {
         this.rect = rect;
     }
 

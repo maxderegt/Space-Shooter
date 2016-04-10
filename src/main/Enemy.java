@@ -22,6 +22,7 @@ public class Enemy {
     private double y;
     private int size = 30;
     private double speed = 2;
+    private int score;
     private double xspeed;
     private double yspeed;
     private double richting;
@@ -39,9 +40,9 @@ public class Enemy {
         int enemy = (int)(Math.round(Math.random()*3));
         if(enemy==0){
             sprite = images.get(0);
-            health = health + health/2;
+            health = health*2;
             damage = damage - damage/4;
-            speed = speed - speed/4;
+            speed = speed - speed/3;
             turn = 0.05;
         }
         else if (enemy ==1){
