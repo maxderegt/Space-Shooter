@@ -19,7 +19,6 @@ public class Run extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         initComponents();
         setMinimumSize(new Dimension(1280, 720));
-        setSize(1280, 720);
         setVisible(true);
     }
 

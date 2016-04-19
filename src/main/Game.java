@@ -97,7 +97,7 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
             playerimg = ImageIO.read(Game.class.getResourceAsStream("/resources/player.png"));
             images.add(big1);images.add(small1);images.add(big2);images.add(small2);
             clip = (Clip)(mixer.getLine(datainfo));
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(Explosion.class.getResource("/resources/starlight.wav"));
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(Bullet.class.getResource("/resources/starlight.wav"));
             clip.open(audioInputStream);
         }
         catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {e.printStackTrace();}
@@ -298,7 +298,7 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
                                 if (!removed) {
                                     explosions.add(new Explosion((int)enemy.getRect2().getBounds().getX(),(int)enemy.getRect2().getBounds().getY(),expl));
                                     iterator2.remove();
-                                    player.setScore(player.getScore() + 1);
+                                    player.setScore(player.getScore() + enemy.getScore());
                                     removed = true;
                                 }
                             }
@@ -308,7 +308,6 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
                         if (!player.isHit()) {
                             player.setHit(true);
                             player.getHit2().start();
-                            System.out.println(player.getHealth() - enemy.getDamage());
                             player.setHealth(player.getHealth() - enemy.getDamage());
                         }
                         enemy.getHit().start();

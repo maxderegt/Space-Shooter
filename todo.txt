@@ -4,9 +4,9 @@ general
 - A NAME!!!!
 - Story Line
 - Multiplayer Deathmatch
+- Co-op
 
 player
-- player model
 - player hit sound
 - player die sound
 - player armor (breakable?)
@@ -16,13 +16,14 @@ player
 
 enemy
 - add bosses
+- after boss different setting
 - add different attacks (example ranged attack)
 - explosion damage
-- credits per enemy
 
 visuals
 - better looking laser
 - better looking shop
+- mouse cursor
 
 system
 - Main menu

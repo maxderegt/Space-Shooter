@@ -44,6 +44,7 @@ public class Enemy {
             damage = damage - damage/4;
             speed = speed - speed/3;
             turn = 0.05;
+            score = 3;
         }
         else if (enemy ==1){
             sprite = images.get(1);
@@ -51,6 +52,7 @@ public class Enemy {
             damage = damage - damage/2;
             speed = speed - speed/4;
             turn = 0.05;
+            score = 2;
         }
         else if (enemy == 2){
             sprite = images.get(2);
@@ -58,6 +60,7 @@ public class Enemy {
             damage = damage + damage/2;
             speed = speed + speed/2;
             turn = 0.015;
+            score = 2;
         }
         else if(enemy == 3){
             sprite = images.get(3);
@@ -65,6 +68,7 @@ public class Enemy {
             damage = damage + damage/4;
             speed = speed + speed/2;
             turn = 0.02;
+            score = 1;
         }
         rect = new Rectangle2D.Double(0,0,sprite.getWidth(null),sprite.getHeight(null));
         rect2 = rect;
@@ -82,6 +86,14 @@ public class Enemy {
             }
         });
 
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
     public double getTurn() {
