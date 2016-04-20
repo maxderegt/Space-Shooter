@@ -1,6 +1,7 @@
 package main;
 
 import javax.sound.sampled.*;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 
 /**
@@ -12,57 +13,53 @@ public class Bullet {
     private double speed = 6;
     private double xspeed;
     private double yspeed;
-    private int eindx;
-    private int eindy;
     private int damage = 34;
     private Mixer mixer;
     private Clip clip;
 
-    public Bullet(int x, int y, int eindx, int eindy){
+    public Bullet(int x, int y, int eindx, int eindy) {
         this.x = x;
         this.y = y;
-        this.eindx = eindx;
-        this.eindy = eindy;
         boolean xpositief;
         boolean ypositief;
         int totaal;
         int xafstand;
         int yafstand;
-        if(x<eindx){
-            xafstand = x-eindx;
+        if (x < eindx) {
+            xafstand = x - eindx;
             xpositief = true;
-        }
-        else {
-            xafstand = eindx-x;
+        } else {
+            xafstand = eindx - x;
             xpositief = false;
         }
-        if(y<eindy){
-            yafstand = y-eindy;
+        if (y < eindy) {
+            yafstand = y - eindy;
             ypositief = true;
-        }
-        else {
-            yafstand = eindy-y;
+        } else {
+            yafstand = eindy - y;
             ypositief = false;
         }
         totaal = xafstand + yafstand;
-        xspeed = ((double)xafstand / (double)totaal)*speed;
-        yspeed = ((double)yafstand / (double)totaal)*speed;
-        if(!xpositief)xspeed = xspeed*-1;
-        if(!ypositief)yspeed = yspeed*-1;
+        xspeed = ((double) xafstand / (double) totaal) * speed;
+        yspeed = ((double) yafstand / (double) totaal) * speed;
+        if (!xpositief) xspeed = xspeed * -1;
+        if (!ypositief) yspeed = yspeed * -1;
 
         Mixer.Info[] mixinfo = AudioSystem.getMixerInfo();
         mixer = AudioSystem.getMixer(mixinfo[0]);
         DataLine.Info datainfo = new DataLine.Info(Clip.class, null);
-        try{
-            clip = (Clip)(mixer.getLine(datainfo));
+        try {
+            clip = (Clip) (mixer.getLine(datainfo));
+        } catch (LineUnavailableException lue) {
+            lue.printStackTrace();
         }
-        catch (LineUnavailableException lue){lue.printStackTrace();}
 
-        try{
+        try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(Explosion.class.getResource("/resources/laser.wav"));
             clip.open(audioInputStream);
+        } catch (LineUnavailableException | UnsupportedAudioFileException | IOException lue) {
+            lue.printStackTrace();
         }
-        catch (LineUnavailableException | UnsupportedAudioFileException | IOException lue){lue.printStackTrace();}
         clip.loop(0);
         clip.start();
 
@@ -93,43 +90,11 @@ public class Bullet {
         this.y = y;
     }
 
-    public double getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
-
     public double getXspeed() {
         return xspeed;
     }
 
-    public void setXspeed(double xspeed) {
-        this.xspeed = xspeed;
-    }
-
     public double getYspeed() {
         return yspeed;
-    }
-
-    public void setYspeed(double yspeed) {
-        this.yspeed = yspeed;
-    }
-
-    public int getEindx() {
-        return eindx;
-    }
-
-    public void setEindx(int eindx) {
-        this.eindx = eindx;
-    }
-
-    public int getEindy() {
-        return eindy;
-    }
-
-    public void setEindy(int eindy) {
-        this.eindy = eindy;
     }
 }

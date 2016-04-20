@@ -62,7 +62,7 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
         bullet = new Timer(1000/4, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e2) {
-                bullets.add(new Bullet((int)player.getX()+player.getSize()/2,(int)player.getY()+player.getSize()/2,x,y));
+                bullets.add(new Bullet((int)player.getX()+player.getwidth()/2,(int)player.getY()+player.getheigth()/2,x,y));
             }
         });
 //      FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
@@ -114,9 +114,9 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
         RenderingHints normalAA = new RenderingHints(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-        //RenderingHints imageAA = new RenderingHints(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        RenderingHints imageAA = new RenderingHints(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         g2.setRenderingHints(normalAA);
-        //g2.setRenderingHints(imageAA);
+        g2.setRenderingHints(imageAA);
         BufferedImage img = new BufferedImage(getWidth(),getHeight(),BufferedImage.TYPE_4BYTE_ABGR);
         if(!bloodcreated) {
             bloodback = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
@@ -125,13 +125,12 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
         }
         Graphics2D G2 = img.createGraphics();
         G2.setColor(new Color(1,0, 255));
-        G2.drawImage(player.getSprite(),player.getTransform(),null);
+        if(player.getHealth()>0) G2.drawImage(player.getSprite(),player.getTransform(),null);
         for(Bullet bullet : bullets){
             G2.setColor(new Color(255, 105,0));
             G2.fillOval((int)(bullet.getX()-2),(int)(bullet.getY()-2),4,4);
         }
         for(Enemy enemy : enemies){
-            G2.setColor(Color.magenta);
             G2.drawImage(enemy.getSprite(),enemy.getTransform(),null);
         }
         for(Explosion explosion : explosions){
@@ -162,45 +161,45 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
                         if (pressed.contains('w') || pressed.contains('s')) {
                             if (key == 'a') {
                                 player.setX(player.getX() - player.getSpeed() * 0.7);
-                                player.setRect(new Rectangle2D.Double(player.getX(), player.getY(), player.getSize(), player.getSize()));
+                                player.setRect(new Rectangle2D.Double(player.getX(), player.getY(), player.getwidth(), player.getheigth()));
                             }
                         } else {
                             if (key == 'a') {
                                 player.setX(player.getX() - player.getSpeed());
-                                player.setRect(new Rectangle2D.Double(player.getX(), player.getY(), player.getSize(), player.getSize()));
+                                player.setRect(new Rectangle2D.Double(player.getX(), player.getY(), player.getwidth(), player.getheigth()));
                             }
                         }
                         if (pressed.contains('w') || pressed.contains('s')) {
                             if (key == 'd') {
                                 player.setX(player.getX() + player.getSpeed() * 0.7);
-                                player.setRect(new Rectangle2D.Double(player.getX(), player.getY(), player.getSize(), player.getSize()));
+                                player.setRect(new Rectangle2D.Double(player.getX(), player.getY(), player.getwidth(), player.getheigth()));
                             }
                         } else {
                             if (key == 'd') {
                                 player.setX(player.getX() + player.getSpeed());
-                                player.setRect(new Rectangle2D.Double(player.getX(), player.getY(), player.getSize(), player.getSize()));
+                                player.setRect(new Rectangle2D.Double(player.getX(), player.getY(), player.getwidth(), player.getheigth()));
                             }
                         }
                         if (pressed.contains('a') || pressed.contains('d')) {
                             if (key == 's') {
                                 player.setY(player.getY() + player.getSpeed() * 0.7);
-                                player.setRect(new Rectangle2D.Double(player.getX(), player.getY(), player.getSize(), player.getSize()));
+                                player.setRect(new Rectangle2D.Double(player.getX(), player.getY(), player.getwidth(), player.getheigth()));
                             }
                         } else {
                             if (key == 's') {
                                 player.setY(player.getY() + player.getSpeed());
-                                player.setRect(new Rectangle2D.Double(player.getX(), player.getY(), player.getSize(), player.getSize()));
+                                player.setRect(new Rectangle2D.Double(player.getX(), player.getY(), player.getwidth(), player.getheigth()));
                             }
                         }
                         if (pressed.contains('a') || pressed.contains('d')) {
                             if (key == 'w') {
                                 player.setY(player.getY() - player.getSpeed() * 0.7);
-                                player.setRect(new Rectangle2D.Double(player.getX(), player.getY(), player.getSize(), player.getSize()));
+                                player.setRect(new Rectangle2D.Double(player.getX(), player.getY(), player.getwidth(), player.getheigth()));
                             }
                         } else {
                             if (key == 'w') {
                                 player.setY(player.getY() - player.getSpeed());
-                                player.setRect(new Rectangle2D.Double(player.getX(), player.getY(), player.getSize(), player.getSize()));
+                                player.setRect(new Rectangle2D.Double(player.getX(), player.getY(), player.getwidth(), player.getheigth()));
                             }
                         }
                         if (player.getX() <= 5) {
@@ -313,7 +312,6 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
                         enemy.getHit().start();
                         enemy.setMove(false);
                     }
-                    if (enemy.isMove()) {
                         double dx = player.getX() - enemy.getX();
                         double dy = player.getY() - enemy.getY();
                         double newRichting = Math.atan2(dy, dx);
@@ -338,7 +336,6 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
                         enemy.getTransform().rotate(enemy.getRichting(), enemy.getSprite().getWidth(null) / 2, enemy.getSprite().getHeight(null) / 2);
 
                         enemy.setRect2(enemy.getTransform().createTransformedShape(enemy.getRect()));
-                    }
 
                 }
 
@@ -442,7 +439,7 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
                         bullet = new Timer((int)Math.round(1000 / player.getFirerate()), new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                bullets.add(new Bullet((int)player.getX()+player.getSize()/2,(int)player.getY()+player.getSize()/2,x,y));
+                                bullets.add(new Bullet((int)player.getX()+player.getwidth()/2,(int)player.getY()+player.getheigth()/2,x,y));
                             }
                         });
                         shop.setFrcost((int)(shop.getFrcost() * shop.getFrincrement()));
@@ -461,7 +458,7 @@ public class Game extends JPanel implements MouseListener,KeyListener,MouseMotio
                     player.setHealth(player.getMaxhealth());
                     player.setX(getWidth()/2);
                     player.setY(getHeight()/2);
-                    player.setRect(new Rectangle2D.Double(player.getX(),player.getY(),player.getSize(),player.getSize()));
+                    player.setRect(new Rectangle2D.Double(player.getX(),player.getY(),player.getwidth(),player.getheigth()));
                     player.setLevel(0);
                     bloodcreated = false;
                     game = true;

@@ -21,7 +21,6 @@ public class Player {
     private double x;
     private double y;
     private double speed = 2.5;
-    private int size = 20;
     private double richting;
     private int score = 0;
     private int level = 0;
@@ -36,7 +35,7 @@ public class Player {
     public Player(int x, int y, Image image){
         this.x = x;
         this.y = y;
-        rect = new Rectangle2D.Double(x,y,size,size);
+        rect = new Rectangle2D.Double(x,y,image.getWidth(null),image.getHeight(null));
         sprite = image;
         rect2 = new Area(rect);
         richting = Math.random() * Math.PI*2;
@@ -114,14 +113,6 @@ public class Player {
         this.speed = speed;
     }
 
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
     public double getRichting() {
         return richting;
     }
@@ -158,10 +149,6 @@ public class Player {
         return hit2;
     }
 
-    public void setHit2(Timer hit2) {
-        this.hit2 = hit2;
-    }
-
     public Rectangle2D.Double getRect() {
         return rect;
     }
@@ -182,12 +169,15 @@ public class Player {
         return sprite;
     }
 
-    public void setSprite(Image sprite) {
-        this.sprite = sprite;
-    }
-
     public AffineTransform getTransform() {
         return transform;
+    }
+
+    public int getwidth(){
+        return sprite.getWidth(null);
+    }
+    public int getheigth(){
+        return sprite.getHeight(null);
     }
 
     public void setTransform(AffineTransform transform) {
