@@ -1,1 +1,57 @@
 # Space-Shooter
+
+
+CHANGELOG
+
+V0.1.01
+- improved hitboxes player with enemies
+- added player model
+- added player model direction 
+
+TODO
+
+general
+- A NAME!!!!
+- Story Line
+- Multiplayer Deathmatch
+- Co-op
+
+player
+- player hit sound
+- player die sound
+- player armor (breakable?)
+- different player weapons
+- special weapon (rockets)
+- limit upgrades (example no firerate of 100 rounds per second)
+
+enemy
+- add bosses
+- after boss different setting
+- add different attacks (example ranged attack)
+- explosion damage
+
+visuals
+- better looking laser
+- better looking shop
+- mouse cursor
+
+system
+- Main menu
+- Pause menu
+- settings
+	- sound
+		- effects level
+		- music level
+	- video
+		- resolutions
+		- Anti aliasing
+	- gamme
+		- difficulty level
+	- controls
+		- keybindings
+		- gamepads/controllers
+- Save file
+- Save/Load game
+
+performance
+- make efficient use of multiple threads
