@@ -43,6 +43,9 @@ system
 - Save file
 - Save/Load game
 
+performance
+- make efficient use of multiple threads
+
 
 CHANGELOG
 
